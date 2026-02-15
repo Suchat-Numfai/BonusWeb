@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary & Bonus Pro - Auto Zero</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style> 
+        body { font-family: 'Kanit', sans-serif; }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen py-10 px-4">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200">
+        <div class="bg-indigo-950 p-8 text-white text-center">
+            <h1 class="text-3xl font-bold tracking-tight">ระบบสรุปรายรับรายจ่ายละเอียด</h1>
+            <p class="opacity-70 mt-1 uppercase text-xs tracking-widest font-semibold text-yellow-400">Payroll | Bonus | Retroactive | Legal Execution</p>
+        </div>
+
+        <div class="p-6 md:p-10 space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                
+                <div class="space-y-6">
+                    <h2 class="text-xl font-bold text-indigo-600 border-l-4 border-indigo-600 pl-3">รายรับ (Incomes)</h2>
+                    <div class="grid grid-cols-1 gap-4 bg-indigo-50/30 p-5 rounded-3xl text-sm">
+                        <div>
+                            <label class="font-bold text-gray-500 uppercase text-xs">เงินเดือนเดิม (ฐานเก่า)</label>
+                            <input type="number" id="oldSalary" class="w-full bg-white border border-indigo-100 rounded-xl px-4 py-2 mt-1 outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="font-bold text-amber-600 uppercase text-xs">เงินตกเบิก (ส่วนต่าง ม.ค.)</label>
+                            <input type="number" id="retroactive" class="w-full bg-white border border-amber-100 rounded-xl px-4 py-2 mt-1 outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="font-bold text-gray-500 uppercase text-xs">โบนัส (เท่า)</label>
+                                <input type="number" id="bonusRate" step="0.1" class="w-full border border-gray-200 rounded-xl px-4 py-2 mt-1 outline-none">
+                            </div>
+                            <div>
+                                <label class="font-bold text-gray-500 uppercase text-xs">ชั่วโมง OT</label>
+                                <input type="number" id="otHours" class="w-full border border-gray-200 rounded-xl px-4 py-2 mt-1 outline-none">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="font-bold text-emerald-600 uppercase text-xs">เบี้ยขยันรายเดือน</label>
+                                <input type="number" id="incMonth" class="w-full border border-emerald-100 rounded-xl px-4 py-2 mt-1 outline-none">
+                            </div>
+                            <div>
+                                <label class="font-bold text-emerald-600 uppercase text-xs">เบี้ยขยันรายปี</label>
+                                <input type="number" id="incYear" class="w-full border border-emerald-100 rounded-xl px-4 py-2 mt-1 outline-none">
+                            </div>
+                        </div>
+                        <div class="pt-2 border-t border-indigo-100">
+                            <label class="font-bold text-emerald-700 uppercase text-xs">รางวัลพิเศษ (ระบุชื่อเอง)</label>
+                            <div class="flex gap-2 mt-1">
+                                <input type="text" id="oName" placeholder="เช่น AOE Award" class="w-2/3 border border-emerald-100 rounded-xl px-3 py-2 outline-none">
+                                <input type="number" id="oVal" placeholder="เงิน" class="w-1/3 border border-emerald-100 rounded-xl px-3 py-2 outline-none">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <h2 class="text-xl font-bold text-red-600 border-l-4 border-red-600 pl-3">รายหัก (Deductions)</h2>
+                    <div class="space-y-5">
+                        <div class="bg-red-50 p-5 rounded-3xl border border-red-100 flex items-start justify-between gap-4">
+                            <div class="flex-1 text-sm">
+                                <p class="font-bold text-red-700">หักกรมบังคับคดี</p>
+                                <p class="text-[10px] text-red-500 italic mt-1 leading-relaxed">อายัด 30% เงินเดือน / 50% โบนัส</p>
+                            </div>
+                            <input type="checkbox" id="legalActive" class="w-8 h-8 rounded-lg text-red-600 cursor-pointer">
+                        </div>
+
+                        <div class="bg-slate-50 p-5 rounded-3xl border border-slate-200">
+                            <label class="text-sm font-bold text-slate-700">กองทุนสำรองฯ (PVD)</label>
+                            <div class="flex items-center gap-3 mt-2">
+                                <input type="number" id="pvdPercent" class="w-20 border border-slate-300 rounded-xl px-3 py-2 outline-none">
+                                <span class="text-xs font-bold text-slate-500 uppercase">% ของฐานใหม่</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <label class="font-bold text-gray-500 uppercase text-xs">ใบเตือน (ใบ)</label>
+                                <input type="number" id="warnCount" class="w-full border border-gray-200 rounded-xl px-4 py-2 mt-1 text-center font-bold outline-none">
+                            </div>
+                            <div>
+                                <label class="font-bold text-gray-500 uppercase text-xs">หักอื่นๆ</label>
+                                <input type="number" id="otherDed" class="w-full border border-gray-200 rounded-xl px-4 py-2 mt-1 outline-none">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <button onclick="calculate()" class="flex-[3] bg-slate-900 text-white py-5 rounded-3xl font-bold text-xl hover:bg-black transition active:scale-95 shadow-xl border-b-4 border-slate-700">คำนวณสลิปเงินเดือน</button>
+                <button onclick="resetForm()" class="flex-1 bg-gray-200 text-gray-600 py-5 rounded-3xl font-bold text-lg hover:bg-gray-300 transition active:scale-95">ล้างข้อมูล</button>
+            </div>
+
+            <div id="result" class="hidden animate-in fade-in slide-in-from-bottom duration-500">
+                <div class="bg-slate-900 rounded-[2.5rem] p-6 md:p-10 text-white shadow-2xl">
+                    <h3 class="text-center text-yellow-500 font-bold tracking-widest mb-10 border-b border-slate-800 pb-4 uppercase">สรุปรายละเอียด ก.พ.</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-sm mb-10">
+                        <div class="space-y-4">
+                            <p class="text-indigo-400 font-bold uppercase text-[10px] tracking-widest border-l-2 border-indigo-500 pl-2">รายรับ</p>
+                            <div class="flex justify-between border-b border-slate-800 pb-1"><span>เงินเดือน ก.พ. (ฐานใหม่):</span><span id="resCurSal"></span></div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1 text-amber-400"><span>เงินตกเบิก ม.ค.:</span><span id="resRetro"></span></div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1"><span>โบนัสประจำปี:</span><span id="resBonus"></span></div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1"><span>ค่า OT (1.5):</span><span id="resOT"></span></div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1 text-emerald-400"><span>เบี้ยขยันรายเดือน:</span><span id="resInM"></span></div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1 text-emerald-400"><span>เบี้ยขยันรายปี:</span><span id="resInY"></span></div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1 text-emerald-400 font-semibold"><span id="resOName"></span><span id="resOVal"></span></div>
+                            <div class="flex justify-between font-bold text-lg pt-4 text-white border-t border-slate-700"><span>รวมรายได้ทั้งหมด:</span><span id="resTotalInc"></span></div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <p class="text-red-400 font-bold uppercase text-[10px] tracking-widest border-l-2 border-red-500 pl-2">รายหัก</p>
+                            <div class="flex justify-between border-b border-slate-800 pb-1"><span>ประกันสังคม (5%):</span><span id="resSSO" class="text-red-400"></span></div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1"><span>กองทุนสำรองฯ (PVD):</span><span id="resPVD" class="text-red-400"></span></div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1 text-red-300 italic"><span>บังคับคดี (30% จากเงินเดือน):</span><span id="resLegalSal"></span></div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1 text-red-300 italic"><span>บังคับคดี (50% จากโบนัส):</span><span id="resLegalBonus"></span></div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1"><span>หักใบเตือน (<span id="resWQty"></span> ใบ):</span><span id="resWarn" class="text-red-400"></span></div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1"><span>หักอื่นๆ:</span><span id="resOtherD" class="text-red-400"></span></div>
+                            <div class="flex justify-between font-bold text-lg pt-4 text-red-500 border-t border-slate-700"><span>รวมรายหักทั้งหมด:</span><span id="resTotalDed"></span></div>
+                        </div>
+                    </div>
+
+                    <div class="pt-8 border-t border-slate-800 text-center">
+                        <p class="text-slate-500 text-[10px] uppercase font-bold tracking-[0.4em] mb-2 font-light">ยอดโอนสุทธิ (NET PAY)</p>
+                        <h2 id="resNet" class="text-6xl md:text-7xl font-black text-yellow-400 tracking-tighter shadow-lg"></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            // ดึงค่าและจัดการกรณีค่าว่างให้เป็น 0 อัตโนมัติ
+            const getVal = (id) => parseFloat(document.getElementById(id).value) || 0;
+
+            const oldSal = getVal('oldSalary');
+            const retro = getVal('retroactive');
+            const bRate = getVal('bonusRate');
+            const otH = getVal('otHours');
+            const mI = getVal('incMonth');
+            const yI = getVal('incYear');
+            const oN = document.getElementById('oName').value || "รายได้พิเศษอื่นๆ";
+            const oV = getVal('oVal');
+            const legalCheck = document.getElementById('legalActive').checked;
+            const pvdPct = getVal('pvdPercent');
+            const wQty = parseInt(document.getElementById('warnCount').value) || 0;
+            const otherD = getVal('otherDed');
+
+            // --- คำนวณรายได้ ---
+            const newSal = oldSal + retro;
+            const bonus = oldSal * bRate;
+            const otAmt = (newSal / 240) * 1.5 * otH;
+            const totalRegular = newSal + otAmt + mI + yI + oV;
+            const totalGross = totalRegular + retro + bonus;
+
+            // --- คำนวณรายหัก ---
+            let sso = newSal * 0.05;
+            if (sso > 850) sso = 850;
+            const pvdAmt = newSal * (pvdPct / 100);
+
+            let legalSal = 0, legalBonus = 0;
+            if (legalCheck) {
+                legalBonus = bonus * 0.5;
+                const afterBasic = totalRegular - sso - pvdAmt;
+                if (afterBasic > 20000) {
+                    legalSal = afterBasic * 0.3;
+                    if ((afterBasic - legalSal) < 20000) legalSal = afterBasic - 20000;
+                }
+            }
+
+            const warnAmt = wQty * 2000;
+            const totalDed = sso + pvdAmt + legalSal + legalBonus + warnAmt + otherD;
+            const netPay = totalGross - totalDed;
+
+            // --- แสดงผล ---
+            document.getElementById('resCurSal').innerText = newSal.toLocaleString() + " ฿";
+            document.getElementById('resRetro').innerText = "+" + retro.toLocaleString() + " ฿";
+            document.getElementById('resBonus').innerText = bonus.toLocaleString(undefined, {minimumFractionDigits: 2}) + " ฿";
+            document.getElementById('resOT').innerText = otAmt.toLocaleString(undefined, {minimumFractionDigits: 2}) + " ฿";
+            document.getElementById('resInM').innerText = mI.toLocaleString() + " ฿";
+            document.getElementById('resInY').innerText = yI.toLocaleString() + " ฿";
+            document.getElementById('resOName').innerText = oN + ":";
+            document.getElementById('resOVal').innerText = oV.toLocaleString() + " ฿";
+            document.getElementById('resTotalInc').innerText = totalGross.toLocaleString(undefined, {minimumFractionDigits: 2}) + " ฿";
+
+            document.getElementById('resSSO').innerText = "-" + sso.toLocaleString() + " ฿";
+            document.getElementById('resPVD').innerText = "-" + pvdAmt.toLocaleString(undefined, {minimumFractionDigits: 2}) + " ฿";
+            document.getElementById('resLegalSal').innerText = "-" + legalSal.toLocaleString(undefined, {minimumFractionDigits: 2}) + " ฿";
+            document.getElementById('resLegalBonus').innerText = "-" + legalBonus.toLocaleString(undefined, {minimumFractionDigits: 2}) + " ฿";
+            document.getElementById('resWQty').innerText = wQty;
+            document.getElementById('resWarn').innerText = "-" + warnAmt.toLocaleString() + " ฿";
+            document.getElementById('resOtherD').innerText = "-" + otherD.toLocaleString() + " ฿";
+            document.getElementById('resTotalDed').innerText = "-" + totalDed.toLocaleString(undefined, {minimumFractionDigits: 2}) + " ฿";
+            document.getElementById('resNet').innerText = netPay.toLocaleString(undefined, {minimumFractionDigits: 2}) + " ฿";
+
+            document.getElementById('result').classList.remove('hidden');
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                if (input.type === 'checkbox') input.checked = false;
+                else input.value = '';
+            });
+            document.getElementById('result').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
